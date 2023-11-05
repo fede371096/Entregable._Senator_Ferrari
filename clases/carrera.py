@@ -5,7 +5,6 @@ class Carrera:
         self.__abandonos = []
         self.__errores_en_pits = []
         self.__penalidades_pilotos = []
-        self.__posiciones = []
     
     @property
     def equipos(self):
@@ -55,14 +54,6 @@ class Carrera:
     def penalidades_pilotos(self, penalidades_pilotos):
         self.__penalidades_pilotos = penalidades_pilotos
         
-    @property
-    def posiciones(self):
-        return self.__posiciones
-    
-    @posiciones.setter
-    def posiciones(self, posiciones):
-        self.__posiciones = posiciones
-        
     def piloto_abandona(self, numero_coche):
         for abandono in self.abandonos:
             if abandono.numero_coche == numero_coche:
@@ -82,50 +73,63 @@ class Carrera:
         for piloto in self.pilotos:
             if piloto.numero_coche == numero_coche:
                 self.abandonos.append(piloto)
-                
-    def score_equipo(self, equipo):
-        score_equipo = 0
+
+#Se obtiene la habilidad del auto y de los mecanicos del equipo ingresado en el parametro              
+    def habilidad_equipo(self, equipo):
+        habilidad_equipo = 0
         for temp_equipo in self.equipos:
             if temp_equipo == equipo:
                 for temp_mecanico in temp_equipo.mecanicos:
-                    score_equipo += temp_mecanico.score
+                    habilidad_equipo += temp_mecanico.habilidad
                 for temp_auto in temp_equipo.auto:
-                    score_equipo += temp_auto.score
-                for temp_piloto in temp_equipo.pilotos:
-                    if temp_piloto.lesionado == False and temp_piloto.reserva == False:
-                        score_equipo += temp_piloto.score
-        return score_equipo
-                                    
-    def score_final(self):
-        score_equipo = 0
-        for equipo in self.equipos:
-            score_equipo = self.score_equipo(equipo)
-            for piloto in equipo:
-                penalidades = 0
-                errores = 0
-                for contador in self.penalidades_pilotos:
-                    if piloto == contador:
-                        penalidades +=1
-                for contador in self.errores_en_pits:
-                    if piloto == contador:
-                        errores +=1
-                if piloto in self.abandonos:
-                    self.posiciones.append(piloto)
-                else:
-                    piloto.puntaje = score_equipo - (penalidades*5) - (errores*8)
-                    self.__posiciones.append(piloto)
-                
-                
-                
-            
+                    habilidad_equipo += temp_auto.habilidad
+        return habilidad_equipo
+                 
+#Se obtiene la habilidad final del piloto en la carrera teniendo en cuenta abandonos, penalizaciones y errores en pits                   
+    def habilidad_carrera(self):
+        for piloto in self.pilotos:
+            if piloto not in self.abandonos:
+                for equipo in self.equipos:
+                    if piloto in equipo.pilotos:
+                        piloto.habilidad_carrera = 0
+                        penalidades = 0
+                        errores = 0
+                        for piloto_penalidad in self.penalidades_pilotos:
+                            if piloto_penalidad == piloto:
+                                penalidades +=1
+                        for piloto_error in self.errores_en_pits:
+                            if piloto_error == piloto:
+                                errores +=1
+                        piloto.habilidad_carrera = self.habilidad_equipo(equipo) + piloto.habilidad - (penalidades*5) - (errores*8)
+            else:
+                piloto.habilidad_carrera = 0
 
+#Se asignan los puntos de la carrera al piloto          
+    def puntaje_piloto(self):
+        posiciones = sorted(self.pilotos, key=habilidad_carrera)
+        for piloto in posiciones:
+            if piloto == posiciones[0]:
+                piloto.puntaje += 25
+            elif piloto == posiciones[1]:
+                piloto.puntaje += 18
+            elif piloto == posiciones[2]:
+                piloto.puntaje += 15
+            elif piloto == posiciones[1]:
+                piloto.puntaje += 12
+            elif piloto == posiciones[1]:
+                piloto.puntaje += 10
+            elif piloto == posiciones[1]:
+                piloto.puntaje += 8
+            elif piloto == posiciones[1]:
+                piloto.puntaje += 6
+            elif piloto == posiciones[1]:
+                piloto.puntaje += 4
+            elif piloto == posiciones[1]:
+                piloto.puntaje += 2
+            elif piloto == posiciones[1]:
+                piloto.puntaje += 1
+            else:
+                piloto.puntaje += 0
+        posiciones.sort(key=puntaje)
         
-        
-            
-                    
-              
-        
-    
-        
-    
-        
+
