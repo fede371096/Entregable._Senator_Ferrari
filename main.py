@@ -1,6 +1,6 @@
 class Empleado:
     def __init__(self, cedula, nombre, fecha_nacimiento, nacionalidad, salario):
-        self.cedula = cedula #preguntar id = cedula?
+        self.cedula = cedula 
         self.nombre = nombre
         self.fecha_nacimiento = fecha_nacimiento 
         self.nacionalidad = nacionalidad
