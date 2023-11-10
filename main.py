@@ -160,7 +160,7 @@ def main():
         print("4. Simular carrera")
         print("5. Realizar consultas")
         print("6. Finalizar programa")
-        opcion = input(int("Seleccione una opción: "))
+        opcion = int(input("Seleccione una opción: "))
         
         if opcion == "1":
             try:
