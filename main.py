@@ -17,6 +17,7 @@ class Piloto(Empleado):
         self.puntos_campeonato = puntos_campeonato
         self.lesionado = lesionado
 
+
 class Mecanico(Empleado):
     def __init__(self, cedula, nombre, fecha_nacimiento, nacionalidad, salario, score):
         super().__init__(cedula, nombre, fecha_nacimiento, nacionalidad, salario)
@@ -38,36 +39,46 @@ class Equipo:
         self.empleados = []
         self.auto = None
 
-    def agregar_empleado(self, empleado): #??
+    def agregar_empleado(self, empleado):
         if len(self.empleados) >= 12:
             print("El equipo ya tiene todos sus empleados.")
         else:
             self.empleados.append(empleado)
 
-    def asignar_auto(self, auto): #??
+    def asignar_auto(self, auto): 
         self.auto = auto
 
 empleados = []
 equipos = []
 autos = []
 
-def ingresar_cedula():
-    while True:
-        cedula = input("Ingrese cedula: ")
-        if len(cedula) == 8 and cedula.isdigit():
-            return cedula
+def ingresar_cedula(): 
+    cedula = input("Ingrese cedula: ")
+    if len(cedula) == 8 and cedula.isdigit():
+        return cedula
+    else:
         print("Cédula no válida. Debe tener 8 números sin guión.") #volvia al programa principal?
 
-def validar_fecha(date_string):
+
+def validar_fecha(date_string): #validacion
     try:
         datetime.datetime.strptime(date_string, '%d/%m/%Y')
         return True
     except ValueError:
         return False #volvia al programa principal?
+    
+def validar_nombre():
+    nombre = input("Ingrese nombre: ")
+    if nombre.isalpha() == True:
+        return nombre.isalpha()
+    else:
+        print("Nombre no valido")
 
-def alta_empleado():
-    cedula = ingresar_cedula()    
-    nombre = input(str("Ingrese nombre: ")) # ??
+def alta_empleado():   
+    
+    cedula = ingresar_cedula()
+    nombre = validar_nombre()
+
     while True:
         fecha_nacimiento = input("Ingrese fecha de nacimiento (DD/MM/AAAA): ") 
         if validar_fecha(fecha_nacimiento):
@@ -76,7 +87,7 @@ def alta_empleado():
         
     while True:
         nacionalidad = input("Ingrese nacionalidad: ")
-        if nacionalidad.isalpha(): #ver espacios, cambiar por str?
+        if nacionalidad.isalpha(): #ver espacios,?
             break
         print("Nacionalidad inválida, ingrese nuevamente.") #volvia al programa principal?
 
@@ -87,38 +98,55 @@ def alta_empleado():
         except ValueError:
             print("Salario inválido, ingrese nuevamente.") #volvia al programa principal?
 
-    cargos_permitidos = ['Piloto', 'Piloto de reserva', 'Mecánico', 'Jefe de equipo'] #hacer en lista desplegable con un if?
-    while True:
-        cargo = input("Ingrese cargo (Piloto, Piloto de reserva, Mecánico, Jefe de equipo): ")
-        if cargo in cargos_permitidos:
-            break
-        print("Cargo no válido.")
     
-    score = None
-    numero_auto = None
-    if cargo in ['Piloto', 'Piloto de reserva', 'Mecánico']:
+    cargo = input("Seleccione una opción: ")
+    print("1. Piloto")
+    print("2. Piloto de reserva")
+    print("3. Mecánico")
+    print("4. Jefe de equipo")
+        
+    if cargo in [1,2,3]:
         while True:
             try:
                 score = int(input("Ingrese score: "))
                 if 1 <= score <= 99:
                     break
-                print("Score debe ser entre 1 y 99.") #volvia al programa principal?
+                print("Score debe ser entre 1 y 99.")
             except ValueError:
-                print("Ingrese un número válido para score.") #volvia al programa principal?
+                print("Ingrese un número válido para score.")
                 
-    if cargo in ['Piloto', 'Piloto de reserva']:
+    elif cargo in [1,2]:
         while True:
             try:
                 numero_auto = int(input("Ingrese número de auto: "))
                 break
             except ValueError:
-                print("Ingrese un número válido para número de auto.") #volvia al programa principal?
+                print("Ingrese un número válido para número de auto.")
 
-    return Empleado(cedula, nombre, fecha_nacimiento, nacionalidad, salario, cargo, score, numero_auto)
+    if cargo == 1:
+        print(cedula, nombre, fecha_nacimiento, nacionalidad, salario, score, numero_auto)
+        empleados.append(Piloto)
+        return Piloto(cedula, nombre, fecha_nacimiento, nacionalidad, salario, score, numero_auto)
+    
+    if cargo == 2:
+        print(cedula, nombre, fecha_nacimiento, nacionalidad, salario, score, numero_auto, titular=False)
+        empleados.append(Piloto)
+        return Piloto(cedula, nombre, fecha_nacimiento, nacionalidad, salario, score, numero_auto, titular=False)
 
-def alta_auto():
+    elif cargo == 3:
+        print(cedula, nombre, fecha_nacimiento, nacionalidad, salario, score)
+        empleados.append(Mecanico)
+        return Mecanico(cedula, nombre, fecha_nacimiento, nacionalidad, salario, score)
+    
+    print(cedula, nombre, fecha_nacimiento, nacionalidad, salario)
+    empleados.append(JefeEquipo)
+    return JefeEquipo(cedula, nombre, fecha_nacimiento, nacionalidad, salario)
+
+
+
+def alta_auto(modelo, ano, score):
     modelo = input("Ingrese modelo: ")
-    ano = input(int("Ingrese año: "))
+    ano = int(input("Ingrese año: "))
     
     while True:
         try:
@@ -131,7 +159,7 @@ def alta_auto():
             
     return Auto(modelo, ano, score)
 
-def alta_equipo():
+def alta_equipo(nombre, equipo, auto, empleado):
     nombre = input("Ingrese nombre del equipo: ")
     equipo = Equipo(nombre)
     
@@ -160,7 +188,7 @@ def main():
         print("4. Simular carrera")
         print("5. Realizar consultas")
         print("6. Finalizar programa")
-        opcion = int(input("Seleccione una opción: "))
+        opcion = input("Seleccione una opción: ")
         
         if opcion == "1":
             try:
@@ -184,6 +212,11 @@ def main():
             except Exception as e:
                 print(f"Error: {e}")
 
+        elif opcion == "4":
+            simular_carrera()
+        elif opcion == "5":
+            realizar_consultas()
+
         elif opcion == "6":
             break
         else:
@@ -191,3 +224,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+    
