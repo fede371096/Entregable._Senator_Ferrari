@@ -214,7 +214,18 @@ def main():
                 print(f"Equipo {equipo.nombre} registrado.")
             except Exception as e:
                 print(f"Error: {e}")
-
+        elif opcion == "4":
+            try:
+                carrera = Carrera()
+                carrera.simular_carrera(equipos)
+            except Exception as e:
+                print(f"Error: {e}")
+        elif opcion == "5":
+            try:
+                consultas = Consultas(equipos)
+                consultas.prog_consultas()
+            except Exception as e:
+                print(f"Error: {e}")
         elif opcion == "6":
             break
         else:
