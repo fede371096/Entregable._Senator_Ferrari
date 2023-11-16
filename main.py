@@ -1,3 +1,6 @@
+from entities.carrera import Carrera
+from entities.consultas_campeonato import Consultas
+from exceptions.opcion_invalida import OpcionInvalida
 import datetime
 
 class Empleado:
@@ -160,7 +163,7 @@ def main():
         print("4. Simular carrera")
         print("5. Realizar consultas")
         print("6. Finalizar programa")
-        opcion = int(input("Seleccione una opción: "))
+        opcion = input("Seleccione una opción: ")
         
         if opcion == "1":
             try:
@@ -183,7 +186,19 @@ def main():
                 print(f"Equipo {equipo.nombre} registrado.")
             except Exception as e:
                 print(f"Error: {e}")
-
+                
+        elif opcion == "4":
+            try:
+                carrera = Carrera()
+                carrera.simular_carrera(equipos)
+            except Exception as e:
+                print(f"Error: {e}")
+        elif opcion == "5":
+            try:
+                consultas = Consultas(equipos)
+                consultas.prog_consultas()
+            except Exception as e:
+                print(f"Error: {e}")
         elif opcion == "6":
             break
         else:
