@@ -1,6 +1,7 @@
 from entities.carrera import Carrera
 from entities.consultas_campeonato import Consultas
 from exceptions.opcion_invalida import OpcionInvalida
+from exceptions.datos_incorrectos import DatosIncorrectos
 import datetime
 
 class Empleado:
@@ -13,12 +14,13 @@ class Empleado:
 
 
 class Piloto(Empleado):
-    def __init__(self, cedula, nombre, fecha_nacimiento, nacionalidad, salario, score, numero_auto, puntos_campeonato=0, lesionado=False):
+    def __init__(self, cedula, nombre, fecha_nacimiento, nacionalidad, salario, score, numero_auto, puntos_campeonato=0, lesionado=0, titular=False):
         super().__init__(cedula, nombre, fecha_nacimiento, nacionalidad, salario)
         self.score = score
         self.numero_auto = numero_auto
         self.puntos_campeonato = puntos_campeonato
         self.lesionado = lesionado
+        self.titular = titular
 
 
 class Mecanico(Empleado):
@@ -57,11 +59,10 @@ autos = []
 
 def ingresar_cedula(): 
     cedula = input("Ingrese cedula: ")
-    if len(cedula) == 8 and cedula.isdigit():
-        return cedula
+    if len(cedula) != 8 or cedula.isdigit() == False:
+        raise DatosIncorrectos()
     else:
-        print("Cédula no válida. Debe tener 8 números sin guión.") #volvia al programa principal?
-
+        return cedula
 
 def validar_fecha(date_string): #validacion
     try:
@@ -75,7 +76,7 @@ def validar_nombre():
     if nombre.isalpha() == True:
         return nombre.isalpha()
     else:
-        print("Nombre no valido")
+        raise DatosIncorrectos()
 
 def alta_empleado():   
     
@@ -86,13 +87,14 @@ def alta_empleado():
         fecha_nacimiento = input("Ingrese fecha de nacimiento (DD/MM/AAAA): ") 
         if validar_fecha(fecha_nacimiento):
             break
-        print("Fecha inválida, use el formato DD/MM/AAAA.")     #volvia al programa principal?
+        print("Fecha inválida, use el formato DD/MM/AAAA.")   
         
     while True:
         nacionalidad = input("Ingrese nacionalidad: ")
-        if nacionalidad.isalpha(): #ver espacios,?
-            break
-        print("Nacionalidad inválida, ingrese nuevamente.") #volvia al programa principal?
+        if nacionalidad.isalpha() == True:
+                break
+        else:
+            raise DatosIncorrectos()
 
     while True:
         try:
@@ -102,48 +104,61 @@ def alta_empleado():
             print("Salario inválido, ingrese nuevamente.") #volvia al programa principal?
 
     
-    cargo = input("Seleccione una opción: ")
-    print("1. Piloto")
-    print("2. Piloto de reserva")
-    print("3. Mecánico")
-    print("4. Jefe de equipo")
-        
-    if cargo in [1,2,3]:
-        while True:
+    cargo = input("""
+Seleccione el cargo del empleado ingresando el número de la opción: 
+1. Piloto
+2. Piloto de reserva
+3. Mecánico
+4. Jefe de equipo
+""")          
+            
+    if cargo not in [1,2,3, 4]:
+        raise OpcionInvalida()
+    elif cargo == 1:
+        try:
+            score = int(input("Ingrese el score del piloto: "))
+            if 1 <= score <= 99:
+                numero_auto = int(input("Ingrese el numero del auto: "))
+                empleados.append(Piloto(cedula, nombre, fecha_nacimiento, nacionalidad, salario, score,numero_auto,puntos_campeonato, lesionado, titular=True))
+        except DatosIncorrectos as e:
+            print({e})
+    elif cargo == 2:
             try:
-                score = int(input("Ingrese score: "))
+                score = int(input("Ingrese el score del piloto: "))
                 if 1 <= score <= 99:
-                    break
-                print("Score debe ser entre 1 y 99.")
-            except ValueError:
-                print("Ingrese un número válido para score.")
-                
-    elif cargo in [1,2]:
-        while True:
-            try:
-                numero_auto = int(input("Ingrese número de auto: "))
-                break
-            except ValueError:
-                print("Ingrese un número válido para número de auto.")
+                    numero_auto = int(input("Ingrese el numero del auto: "))
+                    empleados.append(Piloto(cedula, nombre, fecha_nacimiento, nacionalidad, salario, score,numero_auto,puntos_campeonato=10, lesionado, titular=False))
+            except DatosIncorrectos as e:
+                print({e})
+    elif cargo == 3:
+        try:
+            score = int(input("Ingrese el score del piloto: "))
+            if 1 <= score <= 99:
+                empleados.append(Mecanico(cedula, nombre, fecha_nacimiento, nacionalidad, salario, score)) 
+        except DatosIncorrectos as e:
+            print({e})
+    elif cargo == 4:
+        try:
+            empleados.append(JefeEquipo(cedula, nombre, fecha_nacimiento, nacionalidad, salario)) 
+        except DatosIncorrectos as e:
+            print({e})
 
     if cargo == 1:
         print(cedula, nombre, fecha_nacimiento, nacionalidad, salario, score, numero_auto)
         empleados.append(Piloto)
         return Piloto(cedula, nombre, fecha_nacimiento, nacionalidad, salario, score, numero_auto)
-    
-    if cargo == 2:
+    elif cargo == 2:
         print(cedula, nombre, fecha_nacimiento, nacionalidad, salario, score, numero_auto, titular=False)
         empleados.append(Piloto)
         return Piloto(cedula, nombre, fecha_nacimiento, nacionalidad, salario, score, numero_auto, titular=False)
-
     elif cargo == 3:
         print(cedula, nombre, fecha_nacimiento, nacionalidad, salario, score)
         empleados.append(Mecanico)
         return Mecanico(cedula, nombre, fecha_nacimiento, nacionalidad, salario, score)
-    
-    print(cedula, nombre, fecha_nacimiento, nacionalidad, salario)
-    empleados.append(JefeEquipo)
-    return JefeEquipo(cedula, nombre, fecha_nacimiento, nacionalidad, salario)
+    else:
+        print(cedula, nombre, fecha_nacimiento, nacionalidad, salario)
+        empleados.append(JefeEquipo)
+        return JefeEquipo(cedula, nombre, fecha_nacimiento, nacionalidad, salario)
 
 
 

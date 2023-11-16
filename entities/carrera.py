@@ -75,13 +75,13 @@ class Carrera:
                 raise DatosIncorrectos()
         
         for piloto in self.abandonos:
-            if piloto.numero_de_auto == int(coche):
+            if piloto.numero_auto == int(coche):
                 raise ValoresDuplicados()
         
         while coche != "":
             if coche.isdigit() == True:
                 for piloto in self.pilotos:
-                    if piloto.numero_de_auto == int(coche):
+                    if piloto.numero_auto == int(coche):
                         self.abandonos.append(piloto)
             else:
                 raise DatosIncorrectos()
@@ -95,7 +95,7 @@ class Carrera:
         while coche != "":
             if coche.isdigit() == True:
                 for piloto in self.pilotos:
-                    if piloto.numero_de_auto == int(coche):
+                    if piloto.numero_auto == int(coche):
                         self.errores_en_pits.append(piloto)
             else:
                 raise DatosIncorrectos()
@@ -109,7 +109,7 @@ class Carrera:
         while coche != "":
             if coche.isdigit() == True:
                 for piloto in self.pilotos:
-                    if piloto.numero_de_auto == int(coche):
+                    if piloto.numero_auto == int(coche):
                         self.penalidades.append(piloto)
             else:
                 raise DatosIncorrectos()
@@ -117,20 +117,20 @@ class Carrera:
     def obtener_equipo(self,numero_de_auto):
         for equipo in self.equipos:
             for piloto in equipo.pilotos:
-                if piloto.numero_de_auto == numero_de_auto:
+                if piloto.numero_auto == numero_de_auto:
                     return equipo
                             
     def habilidad_mecanicos(self,equipo):
         suma_de_habilidad = 0
         for mecanico in equipo.mecanicos:
-            suma_de_habilidad += mecanico.habilidad
+            suma_de_habilidad += mecanico.score
         return suma_de_habilidad
     
     def habilidad_auto(self,equipo):
         suma_de_habilidad = 0
         for temp_equipo in self.equipos:
             if equipo == temp_equipo:
-                suma_de_habilidad += equipo.auto.habilidad
+                suma_de_habilidad += equipo.auto.score
         return suma_de_habilidad
                 
     def asignar_puntos(self):
@@ -139,67 +139,67 @@ class Carrera:
                 print(f"1. {posicion[2]}")
                 auto = posicion[0]
                 for piloto in self.pilotos:
-                    if piloto.numero_de_auto == auto:
-                        piloto.puntos += 25
+                    if piloto.numero_auto == auto:
+                        piloto.puntos_campeonato += 25
             elif posicion == self.posiciones[1]:
                 auto = posicion[0]
                 print(f"2. {posicion[2]}")
                 for piloto in self.pilotos:
-                    if piloto.numero_de_auto == auto:
-                        piloto.puntos += 18
+                    if piloto.numero_auto == auto:
+                        piloto.puntos_campeonato += 18
             elif posicion == self.posiciones[2]:
                 auto = posicion[0]
                 print(f"3. {posicion[2]}")
                 for piloto in self.pilotos:
-                    if piloto.numero_de_auto == auto:
-                        piloto.puntos += 15
+                    if piloto.numero_auto == auto:
+                        piloto.puntos_campeonato += 15
             elif posicion == self.posiciones[3]:
                 auto = posicion[0]
                 print(f"4. {posicion[2]}")
                 for piloto in self.pilotos:
-                    if piloto.numero_de_auto == auto:
-                        piloto.puntos += 12
+                    if piloto.numero_auto == auto:
+                        piloto.puntos_campeonato += 12
             elif posicion == self.posiciones[4]:
                 auto = posicion[0]
                 print(f"5. {posicion[2]}")                     
                 for piloto in self.pilotos:
-                    if piloto.numero_de_auto == auto:
-                        piloto.puntos += 10 
+                    if piloto.numero_auto == auto:
+                        piloto.puntos_campeonato += 10 
             elif posicion == self.posiciones[5]:
                 auto = posicion[0]
                 print(f"6. {posicion[2]}")
                 for piloto in self.pilotos:
-                    if piloto.numero_de_auto == auto:
-                        piloto.puntos += 8
+                    if piloto.numero_auto == auto:
+                        piloto.puntos_campeonato += 8
             elif posicion == self.posiciones[6]:
                 auto = posicion[0]
                 print(f"7. {posicion[2]}")
                 for piloto in self.pilotos:
-                    if piloto.numero_de_auto == auto:
-                        piloto.puntos += 6
+                    if piloto.numero_auto == auto:
+                        piloto.puntos_campeonato += 6
             elif posicion == self.posiciones[7]:
                 auto = posicion[0]
                 print(f"8. {posicion[2]}")
                 for piloto in self.pilotos:
-                    if piloto.numero_de_auto == auto:
-                        piloto.puntos += 4
+                    if piloto.numero_auto == auto:
+                        piloto.puntos_campeonato += 4
             elif posicion == self.posiciones[8]:
                 auto = posicion[0]
                 print(f"9. {posicion[2]}")
                 for piloto in self.pilotos:
-                    if piloto.numero_de_auto == auto:
-                        piloto.puntos += 2
+                    if piloto.numero_auto == auto:
+                        piloto.puntos_campeonato += 2
             elif posicion == self.posiciones[9]:
                 auto = posicion[0]
                 print(f"10. {posicion[2]}")
                 for piloto in self.pilotos:
-                    if piloto.numero_de_auto == auto:
-                        piloto.puntos += 1
+                    if piloto.numero_auto == auto:
+                        piloto.puntos_campeonato += 1
             elif posicion > self.posiciones[9]:
                 auto = posicion[0]
                 contador = 11
                 for piloto in self.pilotos:
-                    if piloto.numero_de_auto == auto:
+                    if piloto.numero_auto == auto:
                         print(f"{contador}. {posicion[2]}")
                         contador += 1
                      
@@ -208,13 +208,13 @@ class Carrera:
         for piloto in self.pilotos:
             score_final = 0
             if piloto in self.abandonos:
-                piloto.puntos += 0
+                piloto.puntos_campeonato += 0
             else:
                 errores = self.errores_en_pits.count(piloto)
                 penalidad = self.penalidades.count(piloto)
                 equipo = self.obtener_equipo(piloto.numero_de_auto)
-                score_final = self.habilidad_mecanicos(equipo) + self.habilidad_auto(equipo) + piloto.habilidad - (errores*5) - (penalidad*8)
-                self.posiciones.append((piloto.numero_de_auto,score_final, piloto.nombre))        
+                score_final = self.habilidad_mecanicos(equipo) + self.habilidad_auto(equipo) + piloto.score - (errores*5) - (penalidad*8)
+                self.posiciones.append((piloto.numero_auto,score_final, piloto.nombre))        
         self.posiciones.sort(key=lambda piloto:piloto[1],reverse=True)
         self.asignar_puntos()
         
