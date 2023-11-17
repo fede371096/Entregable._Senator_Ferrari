@@ -1,3 +1,4 @@
+from abc import ABC
 from entities.carrera import Carrera
 from entities.consultas_campeonato import Consultas
 from exceptions.opcion_invalida import OpcionInvalida
@@ -8,7 +9,7 @@ from exceptions.valores_duplicados import ValoresDuplicados
 from exceptions.sin_cupos import SinCupos
 import datetime
 
-class Empleado:
+class Empleado(ABC):
     def __init__(self, cedula, nombre, fecha_nacimiento, nacionalidad, salario):
         self.cedula = cedula 
         self.nombre = nombre
@@ -57,21 +58,20 @@ class Equipo:
         self.pilotos = []
         self.auto = None
         self.mecanicos = []
-        self.jefe_equipo = []
+        self.jefe_equipo = None
         
     def agregar_empleado(self, lista_empleados):
         pilotos_titulares = 0
         piloto_reserva = 0
         cant_mecanicos = 0
-        #while True:
         documento = ingresar_cedula()
         empleado_existente = buscar_empleado(documento, lista_empleados)
-        if len(self.pilotos) < 3 and len(self.mecanicos) < 2 and self.jefe_equipo != None:    
+        if len(self.pilotos) < 3 and len(self.mecanicos) < 2 and self.jefe_equipo == None:    
             if empleado_existente in self.pilotos:
                 raise ValoresDuplicados()
             elif empleado_existente in self.mecanicos:
                 raise ValoresDuplicados()
-            elif empleado_existente in self.jefe_equipo:
+            elif empleado_existente == self.jefe_equipo:
                 raise ValoresDuplicados()
             for piloto in self.pilotos:
                 tipo = type(piloto)
@@ -86,31 +86,30 @@ class Equipo:
                         cant_mecanicos += 1
                 
             if type(empleado_existente) == Piloto:
-                if empleado_existente.titular == True and pilotos_titulares <2:
+                if empleado_existente.titular == True and pilotos_titulares < 2:
                     self.pilotos.append(empleado_existente)
-                    print(f"Empleado {empleado_existente.nombre} registrado")
+                    print(f"Empleado {empleado_existente.nombre} vinculado al equipo")
                 elif empleado_existente.titular == False and piloto_reserva == 0:
                     self.pilotos.append(empleado_existente)
-                    print(f"Empleado {empleado_existente.nombre} registrado")
+                    print(f"Empleado {empleado_existente.nombre} vinculado al equipo")
                 else:
                     raise SinCupos()
             elif type(empleado_existente) == Mecanico:
                 if cant_mecanicos < 8:
                     self.mecanicos.append(empleado_existente)
-                    print(f"Empleado {empleado_existente.nombre} registrado")
+                    print(f"Empleado {empleado_existente.nombre} vinculado al equipo")
                 else:
                     raise SinCupos()
-            elif tipo == JefeEquipo:
-                if self.jefe_equipo != None:
+            elif type(empleado_existente) == JefeEquipo:
+                if self.jefe_equipo == None:
                     self.jefe_equipo = empleado_existente
-                    print(f"Empleado {empleado_existente.nombre} registrado")
+                    print(f"Empleado {empleado_existente.nombre} vinculado al equipo")
                 else:
                     raise SinCupos()
         else:
             print("EL equipo se encuentra completo")
             
         
-
 def ingresar_cedula(): 
     cedula = input("Ingrese cedula: ")
     if len(cedula) != 8 or cedula.isdigit() == False:
@@ -158,7 +157,7 @@ def ingresar_score():
     valicacion = False
     try:
         score = int(input("Ingrese el score: "))
-        if 1 < score < 99:
+        if 1 <= score <= 99:
             valicacion = True
     except DatosIncorrectos:
         valicacion = False
@@ -185,7 +184,7 @@ def ingresar_modelo():
 def ingresar_anio():
     try:
         anio = int(input("Ingrese el año del modelo: "))
-        if 1900 < anio < 2024:
+        if 1850 < anio < 2024:
             validacion = True
     except DatosIncorrectos:
         validacion = False
@@ -202,11 +201,12 @@ def buscar_auto(modelo,lista_autos):
             raise ObjetoNoExiste()
 
 def buscar_empleado(documento, lista_empleados):
-    for empleado in lista_empleados:
-        if empleado.cedula == documento:
-            return empleado
-        else:
-            raise ObjetoNoExiste()
+    try:
+        for empleado in lista_empleados:
+            if empleado.cedula == documento:
+                return empleado
+    except ObjetoNoExiste as e:
+        print(e)
     
 def alta_empleado():   
 
@@ -270,7 +270,7 @@ def alta_equipo(lista_autos, lista_empleados):
     except DatosIncorrectos as e:
         print(e)
     
-    for i in range(12):
+    for i in range(3):
         try:
             equipo.agregar_empleado(lista_empleados)
         except Exception as e:
@@ -282,12 +282,14 @@ def main():
     lista_empleados = []
     lista_autos = []
     while True:
-        print("1. Alta de empleado")
-        print("2. Alta de auto")
-        print("3. Alta de equipo")
-        print("4. Simular carrera")
-        print("5. Realizar consultas")
-        print("6. Finalizar programa")
+        print("""
+1. Alta de empleado
+2. Alta de auto
+3. Alta de equipo
+4. Simular carrera
+5. Realizar consultas
+6. Finalizar programa
+""")
         opcion = input("Seleccione una opción: ")
         
         if opcion == "1":

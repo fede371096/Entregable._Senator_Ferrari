@@ -65,7 +65,7 @@ class Carrera:
     def ingresar_pilotos(self):
         for equipo in self.equipos:
             for piloto in equipo.pilotos:
-                if piloto.reserva == False and piloto.lesionado == False:
+                if piloto.titular == True and piloto.lesionado == False:
                     self.pilotos.append(piloto)
     
     def ingresar_abandonos(self):
@@ -134,6 +134,8 @@ class Carrera:
         return suma_de_habilidad
                 
     def asignar_puntos(self):
+        print("""
+Posiciones:""")
         for posicion in self.posiciones:
             if posicion == self.posiciones[0]:
                 print(f"1. {posicion[2]}")
@@ -212,7 +214,7 @@ class Carrera:
             else:
                 errores = self.errores_en_pits.count(piloto)
                 penalidad = self.penalidades.count(piloto)
-                equipo = self.obtener_equipo(piloto.numero_de_auto)
+                equipo = self.obtener_equipo(piloto.numero_auto)
                 score_final = self.habilidad_mecanicos(equipo) + self.habilidad_auto(equipo) + piloto.score - (errores*5) - (penalidad*8)
                 self.posiciones.append((piloto.numero_auto,score_final, piloto.nombre))        
         self.posiciones.sort(key=lambda piloto:piloto[1],reverse=True)
