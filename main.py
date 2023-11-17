@@ -63,53 +63,52 @@ class Equipo:
         pilotos_titulares = 0
         piloto_reserva = 0
         cant_mecanicos = 0
-        while True:
-            documento = ingresar_cedula()
-            empleado_existente = buscar_empleado(documento, lista_empleados)
-            if len(self.pilotos) < 3 and len(self.mecanicos) < 2 and self.jefe_equipo != None:    
-                if empleado_existente in self.pilotos:
-                    raise ValoresDuplicados()
-                elif empleado_existente in self.mecanicos:
-                    raise ValoresDuplicados()
-                elif empleado_existente in self.jefe_equipo:
-                    raise ValoresDuplicados()
-
-                for piloto in self.pilotos:
-                    tipo = type(piloto)
-                    if tipo == Piloto:
-                        if piloto.titular == True:
-                            pilotos_titulares += 1
-                        else:
-                            piloto_reserva += 1
-                    for mecanico in self.mecanicos:
-                        tipo = type(mecanico)
-                        if tipo == Mecanico:
-                            cant_mecanicos += 1
-                    
-                if type(empleado_existente) == Piloto:
-                    if empleado_existente.titular == True and pilotos_titulares <2:
-                        self.pilotos.append(empleado_existente)
-                        print(f"Empleado {empleado_existente.nombre} registrado")
-                    elif empleado_existente.titular == False and piloto_reserva == 0:
-                        self.pilotos.append(empleado_existente)
-                        print(f"Empleado {empleado_existente.nombre} registrado")
+        #while True:
+        documento = ingresar_cedula()
+        empleado_existente = buscar_empleado(documento, lista_empleados)
+        if len(self.pilotos) < 3 and len(self.mecanicos) < 2 and self.jefe_equipo != None:    
+            if empleado_existente in self.pilotos:
+                raise ValoresDuplicados()
+            elif empleado_existente in self.mecanicos:
+                raise ValoresDuplicados()
+            elif empleado_existente in self.jefe_equipo:
+                raise ValoresDuplicados()
+            for piloto in self.pilotos:
+                tipo = type(piloto)
+                if tipo == Piloto:
+                    if piloto.titular == True:
+                        pilotos_titulares += 1
                     else:
-                        raise SinCupos()
-                elif type(empleado_existente) == Mecanico:
-                    if cant_mecanicos < 8:
-                        self.mecanicos.append(empleado_existente)
-                        print(f"Empleado {empleado_existente.nombre} registrado")
-                    else:
-                        raise SinCupos()
-                elif tipo == JefeEquipo:
-                    if self.jefe_equipo != None:
-                        self.jefe_equipo = empleado_existente
-                        print(f"Empleado {empleado_existente.nombre} registrado")
-                    else:
-                        raise SinCupos()
-            else:
-                print("EL equipo se encuentra completo")
-                break
+                        piloto_reserva += 1
+                for mecanico in self.mecanicos:
+                    tipo = type(mecanico)
+                    if tipo == Mecanico:
+                        cant_mecanicos += 1
+                
+            if type(empleado_existente) == Piloto:
+                if empleado_existente.titular == True and pilotos_titulares <2:
+                    self.pilotos.append(empleado_existente)
+                    print(f"Empleado {empleado_existente.nombre} registrado")
+                elif empleado_existente.titular == False and piloto_reserva == 0:
+                    self.pilotos.append(empleado_existente)
+                    print(f"Empleado {empleado_existente.nombre} registrado")
+                else:
+                    raise SinCupos()
+            elif type(empleado_existente) == Mecanico:
+                if cant_mecanicos < 8:
+                    self.mecanicos.append(empleado_existente)
+                    print(f"Empleado {empleado_existente.nombre} registrado")
+                else:
+                    raise SinCupos()
+            elif tipo == JefeEquipo:
+                if self.jefe_equipo != None:
+                    self.jefe_equipo = empleado_existente
+                    print(f"Empleado {empleado_existente.nombre} registrado")
+                else:
+                    raise SinCupos()
+        else:
+            print("EL equipo se encuentra completo")
+            
         
 
 def ingresar_cedula(): 
@@ -271,18 +270,13 @@ def alta_equipo(lista_autos, lista_empleados):
     except DatosIncorrectos as e:
         print(e)
     
-    #for i in range(12):
-    equipo.agregar_empleado(lista_empleados)
+    for i in range(12):
+        try:
+            equipo.agregar_empleado(lista_empleados)
+        except Exception as e:
+            print(e)
     return equipo
         
-    
-    #print("Ingrese los empleados para este equipo:")
-    #for _ in range(12):
-    #    empleado = alta_empleado()
-    #    equipo.agregar_empleado(empleado) #Verificar el orden 2 pilotos, 1 piloto reserva, 1 jefe equipo y 8 mecanicos
-    #
-    #return equipo
-
 def main():
     lista_equipos = []
     lista_empleados = []
@@ -303,12 +297,6 @@ def main():
                 print(f"El empleado {empleado.nombre} fue registrado.")
             except Exception as e:
                 print(f"Error: {e}")
-            # try:
-            #     empleado = alta_empleado()
-            #     print(f"Empleado {empleado.nombre} registrado.")
-            # except Exception as e:
-            #     print(f"Error: {e}")
-                
         elif opcion == "2":
             try:
                 auto = alta_auto()
