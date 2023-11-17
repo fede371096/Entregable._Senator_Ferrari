@@ -27,10 +27,8 @@ class Consultas:
                     self.pilotos.append(piloto)
         
     def pilotos_con_mas_puntos(self):
-        print("""
-              
-Pilotos con mas puntos
-""")
+        print(""" 
+Pilotos con mas puntos""")
         self.pilotos.sort(key=lambda piloto:piloto.puntos_campeonato,reverse=True)
         contador = 0
         for puntaje_piloto in self.pilotos[0:9]:
@@ -51,8 +49,7 @@ Resumen del campeonato de constructores""")
     def mejores_pagos(self):
         print("""
 -----------------------
-Top 5 pilotos mejores pago
-""")
+Top 5 pilotos mejores pago""")
         self.pilotos.sort(key=lambda piloto:piloto.salario,reverse=True)
         contador = 0
         for sueldo_piloto in self.pilotos[0:4]:
@@ -62,8 +59,7 @@ Top 5 pilotos mejores pago
     def habilidosos(self):
         print("""
 -----------------------
-Top 3 mas habilidosos
-""")
+Top 3 mas habilidosos""")
         self.pilotos.sort(key=lambda piloto:piloto.score,reverse=True)
         contador = 0
         for temp_habilidad in self.pilotos[0:3]:
@@ -73,10 +69,9 @@ Top 3 mas habilidosos
     def directores(self):
         print("""
 -----------------------
-Directores de equipo
-""")
+Directores de equipo""")
         for equipo in self.lista_equipos:
-            print(equipo.nombre + " - Director: " + equipo.jefe_equipo.nombre)
+            print("Equipo:" + equipo.nombre + " - Director: " + equipo.jefe_equipo.nombre)
         print(""" 
 -----------------------              
               """)

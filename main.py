@@ -270,7 +270,7 @@ def alta_equipo(lista_autos, lista_empleados):
     except DatosIncorrectos as e:
         print(e)
     
-    for i in range(3):
+    for i in range(12):
         try:
             equipo.agregar_empleado(lista_empleados)
         except Exception as e:
