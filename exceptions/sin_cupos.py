@@ -1,7 +1,7 @@
-class ValoresDuplicados(Exception):
+class SinCupos(Exception):
     def __init__(self):
-        self.__codigo = 401
-        self.__mensaje = "Los datos ingresados ya existen"
+        self.__codigo = 406
+        self.__mensaje = "No quedan cupos disponibles para ingresar"
         
     @property
     def codigo(self):

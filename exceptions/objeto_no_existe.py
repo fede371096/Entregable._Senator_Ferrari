@@ -1,7 +1,7 @@
-class ValoresDuplicados(Exception):
+class ObjetoNoExiste(Exception):
     def __init__(self):
-        self.__codigo = 401
-        self.__mensaje = "Los datos ingresados ya existen"
+        self.__codigo = 405
+        self.__mensaje = "El objetos no existe"
         
     @property
     def codigo(self):

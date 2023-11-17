@@ -1,7 +1,7 @@
-class ValoresDuplicados(Exception):
+class FormatoIncorrecto(Exception):
     def __init__(self):
-        self.__codigo = 401
-        self.__mensaje = "Los datos ingresados ya existen"
+        self.__codigo = 403
+        self.__mensaje = "Los datos ingresados no cumplen el formato solicitado"
         
     @property
     def codigo(self):
