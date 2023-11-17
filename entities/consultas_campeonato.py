@@ -1,4 +1,3 @@
-#from exceptions.opcion_invalida import OpcionInvalida
 class Consultas:
     def __init__(self,lista_equipos):
         self.__pilotos = []
@@ -87,42 +86,3 @@ Directores de equipo""")
         except Exception as e:
             print(e)
             
-#         while True:
-#             print("""
-# 1. Top 10 pilotos con más puntos en el campeonato
-# 2. Resumen de campeonato de constructores
-# 3. Top 5 de pilotos mejores pagos
-# 4. Top 3 de pilotos mas habilidosos
-# 5. Retornar jefes de equipo
-# 6. Volver atras""")
-#             opcion = int(input("Seleccione una opción: "))
-        
-#             if opcion == 1:
-#                 try:
-#                     self.pilotos_con_mas_puntos()
-#                 except Exception as e:
-#                     print(f"Error: {e}")
-#             elif opcion == 2:
-#                 try:
-#                     self.resumen_constructores()
-#                 except Exception as e:
-#                     print(f"Error: {e}")
-#             elif opcion == 3:
-#                 try: 
-#                     self.mejores_pagos()
-#                 except Exception as e:
-#                     print(f"Error: {e}")
-#             elif opcion == 4:
-#                 try:
-#                     self.habilidosos()
-#                 except Exception as e:
-#                     print(f"Error: {e}")
-#             elif opcion == 5:
-#                 try:
-#                     self.directores()
-#                 except Exception as e:
-#                     print(f"Error: {e}")
-#             elif opcion == 6:
-#                 break
-#             else:
-#                 raise OpcionInvalida()

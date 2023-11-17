@@ -125,7 +125,7 @@ def ingresar_nombre():
     else:
         raise DatosIncorrectos()
     
-def validar_fecha(): #validacion
+def validar_fecha():
     fecha_nacimiento = input("Ingrese fecha de nacimiento (DD/MM/AAAA): ")
     validacion = False
     try:
